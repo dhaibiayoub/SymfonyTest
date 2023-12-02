@@ -7,11 +7,13 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model;
 use App\Controller\Api\FetchCustomersController;
 use App\Entity\Enum\CustomerGender;
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,6 +22,45 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(
             name: 'api_customers_index',
             controller: FetchCustomersController::class,
+            openapi: new Model\Operation(
+                summary: 'Retrieves the collection of Customer resources.',
+                description: 'Retrieves the collection of Customer resources. Along with the number of requests that were made for this same operation.',
+                responses: [
+                    Response::HTTP_OK => new Model\Response(
+                        content: new \ArrayObject([
+                            'application/json' => [
+                                'schema' => [
+                                    'type' => 'object',
+                                    'properties' => [
+                                        'responseData' => [
+                                            'type' => 'object',
+                                            'properties' => [
+                                                'customers' => ['type' => 'array'],
+                                                'requestCount' => ['type' => 'inetegr'],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                                'example' => [
+                                    'customers' => [
+                                        [
+                                            'firstname' => 'string',
+                                            'lastname' => 'string',
+                                            'email' => 'user@example.com',
+                                        ],
+                                        [
+                                            'firstname' => 'string',
+                                            'lastname' => 'string',
+                                            'email' => 'user@example.com',
+                                        ],
+                                    ],
+                                    'requestCount' => 1,
+                                ],
+                            ],
+                        ])
+                    ),
+                ]
+            )
         ),
         new Post(
             name: 'api_customers_new',
