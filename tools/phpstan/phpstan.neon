@@ -1,0 +1,18 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: max
+    #level: 6
+    treatPhpDocTypesAsCertain: false
+    paths:
+        - %currentWorkingDirectory%/bin/
+        - %currentWorkingDirectory%/config/
+        - %currentWorkingDirectory%/public/
+        - %currentWorkingDirectory%/src/
+    bootstrapFiles:
+        - ../vendor/autoload.php
+    excludePaths:
+        - %currentWorkingDirectory%/vendor/
+    symfony:
+        containerXmlPath: %currentWorkingDirectory%/var/cache/dev/App_KernelDevDebugContainer.xml
