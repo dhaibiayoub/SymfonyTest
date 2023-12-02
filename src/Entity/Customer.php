@@ -18,13 +18,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new GetCollection(
-            name: 'customers_index',
+            name: 'api_customers_index',
             controller: FetchCustomersController::class,
-            normalizationContext: ['groups' => ['customer:list']],
-            denormalizationContext: ['groups' => ['customer:list']],
         ),
         new Post(
-            name: 'customers_new',
+            name: 'api_customers_new',
             normalizationContext: ['groups' => ['customer:create']],
             denormalizationContext: ['groups' => ['customer:create']],
         ),

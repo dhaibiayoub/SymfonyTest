@@ -4,23 +4,19 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
-use App\Entity\Customer;
-use App\Repository\CustomerRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Provider\CustomerListProvider;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
-class FetchCustomersController extends AbstractController
+class FetchCustomersController
 {
     public function __construct(
-        private CustomerRepository $customerRepository
+        private CustomerListProvider $customerListProvider,
     ) {}
 
-    /**
-     * @return Customer[] Returns an array of Customer objects
-     */
-    public function __invoke(): array
+    public function __invoke(): JsonResponse
     {
-        return $this->customerRepository->findAll();
+        return new JsonResponse($this->customerListProvider->provide());
     }
 }
