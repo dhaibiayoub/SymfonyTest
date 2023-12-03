@@ -16,3 +16,4 @@ parameters:
         - %currentWorkingDirectory%/vendor/
     symfony:
         containerXmlPath: %currentWorkingDirectory%/var/cache/dev/App_KernelDevDebugContainer.xml
+    checkGenericClassInNonGenericObjectType: false

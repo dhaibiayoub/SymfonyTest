@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} requests{% endblock %}
+
+{% block body %}
+    <h1 class="m-5 text-center">Weather requests ☀️⛅⛈️🌤️🌧️🌨️🌩️🌪️</h1>
+
+    <table class="table table-hover mt-5">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">City</th>
+                <th scope="col">Local time</th>
+                <th scope="col">Temperature</th>
+                <th scope="col">Feels like</th>
+                <th scope="col">Wind speed</th>
+                <th scope="col">Humidity</th>
+                <th scope="col">UV</th>
+                <th scope="col">Requested at</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for weatherRequest in weatherRequests %}
+                <tr>
+                    <td scope="row">
+                        {% if weatherRequest.icon is not null %}
+                            <img src="{{ weatherRequest.icon }}">
+                        {% endif %}
+                    </td>
+                    <td>{{ weatherRequest.city }}</td>
+                    <td>{{ weatherRequest.cityLocalTime|date('d/m/Y H:i') }}</td>
+                    <td>{{ weatherRequest.temperature }}&deg;C</td>
+                    <td>{{ weatherRequest.feelslike }}&deg;C</td>
+                    <td>{{ weatherRequest.windSpeed }} km/h</td>
+                    <td>{{ weatherRequest.humidity }} km/h</td>
+                    <td>{{ weatherRequest.uv }}</td>
+                    <td>{{ weatherRequest.requestedAt|date('d/m/Y H:i:s') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="pagination justify-content-center mr-5">
+        {{ knp_pagination_render(weatherRequests) }}
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+{% endblock %}
