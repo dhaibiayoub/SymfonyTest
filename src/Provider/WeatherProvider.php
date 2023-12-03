@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Provider;
 
-use App\Client\OpenWeatherClient;
+use App\Client\WeatherApiClient;
 use App\Entity\Weather;
 use App\Event\SaveWeatherEvent;
 use App\Repository\WeatherRepository;
@@ -17,7 +17,7 @@ class WeatherProvider
 {
     public function __construct(
         private EventDispatcherInterface $dispatcher,
-        private OpenWeatherClient $openWeatherClient,
+        private WeatherApiClient $weatherApiClient,
         private WeatherRepository $weatherRepository,
         private PaginatorInterface $paginator,
         private RequestStack $requestStack,
@@ -41,7 +41,7 @@ class WeatherProvider
     public function provideByCity(string $city): array
     {
         /** @var array<string> $currentWeatherData weather data */
-        $currentWeatherData = $this->openWeatherClient->getCurrentWeatherByCity($city);
+        $currentWeatherData = $this->weatherApiClient->getCurrentWeatherByCity($city);
         if (false === \array_key_exists('error', $currentWeatherData)) {
             $this->dispatcher->dispatch(new SaveWeatherEvent($currentWeatherData), SaveWeatherEvent::SAVE);
         }

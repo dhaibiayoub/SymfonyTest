@@ -8,11 +8,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class OpenWeatherClient
+class WeatherApiClient
 {
     public function __construct(
-        private string $openWeatherApiUrl,
-        private string $openWeatherApiKey,
+        private string $weatherApiUrl,
+        private string $weatherApiKey,
         private HttpClientInterface $client,
     ) {}
 
@@ -51,12 +51,12 @@ class OpenWeatherClient
     {
         $response = $this->client->request(
             Request::METHOD_GET,
-            "{$this->openWeatherApiUrl}/{$url}",
+            "{$this->weatherApiUrl}/{$url}",
             ['query' => $this->prepareRequestParamters($city)],
         );
 
         if (Response::HTTP_OK !== $response->getStatusCode()) {
-            throw new \Exception('Error when calling OpenWeather API.');
+            throw new \Exception('Error when calling WeatherApi API.');
         }
 
         $results = $response->toArray();
@@ -64,7 +64,7 @@ class OpenWeatherClient
             [] === $results['location'] ||
             [] === $results['current']
         ) {
-            // throw new \Exception('Data unavailable from OpenWeather API.');
+            // throw new \Exception('Data unavailable from WeatherApi API.');
             // Sometimes API does not return 'current' value because this is a test acount.
             // For this reason we've added some fake data instead of throwing an error. No need to make a subscription because this is only a test.
             $results = $this->getFakeData($results);
@@ -77,19 +77,19 @@ class OpenWeatherClient
     }
 
     /**
-     * @return array<string> openWeather query request parameters
+     * @return array<string> weatherApi query request parameters
      */
     private function prepareRequestParamters(string $city): array
     {
         return [
             'lang' => 'fr',
-            'key' => $this->openWeatherApiKey,
+            'key' => $this->weatherApiKey,
             'q' => $city,
         ];
     }
 
     /**
-     * @param array<string,array<array<string,int|string>|float|int|string>> $results weather data returned from OpenWeather API
+     * @param array<string,array<array<string,int|string>|float|int|string>> $results weather data returned from WeatherApi API
      *
      * @return array<string,array<array<string,int|string>|float|int|string>> weather data
      */
